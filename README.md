@@ -1,6 +1,6 @@
-# beauty_app – PostgreSQL Service
+# Multi Tenant RLS PostgreSQL Service
 
-PostgreSQL 16 database for **beauty_app**, running in Docker with full **Row Level Security (RLS)** enforcement. Includes pgAdmin for database management.
+PostgreSQL 16 database , running in Docker with full **Row Level Security (RLS)** enforcement. Includes pgAdmin for database management.
 
 ---
 
