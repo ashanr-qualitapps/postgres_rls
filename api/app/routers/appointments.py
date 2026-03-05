@@ -56,12 +56,12 @@ async def list_appointments(
 
 @router.get("/{appointment_id}", response_model=AppointmentResponse)
 async def get_appointment(
-    appointment_id: str,
+    appointment_id: uuid.UUID,
     current_user: dict = Depends(get_current_user),
 ):
     async with rls_conn(**current_user) as conn:
         row = await conn.fetchrow(
-            "SELECT * FROM appointments WHERE id = $1::uuid", appointment_id
+            "SELECT * FROM appointments WHERE id = $1", appointment_id
         )
     if not row:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Appointment not found")
@@ -106,7 +106,7 @@ async def create_appointment(
 
 @router.patch("/{appointment_id}", response_model=AppointmentResponse)
 async def update_appointment(
-    appointment_id: str,
+    appointment_id: uuid.UUID,
     body: AppointmentUpdate,
     current_user: dict = Depends(get_current_user),
 ):
@@ -126,7 +126,7 @@ async def update_appointment(
     set_clause = ", ".join(f"{k} = ${i + 2}" for i, k in enumerate(updates))
     async with rls_conn(**current_user) as conn:
         row = await conn.fetchrow(
-            f"UPDATE appointments SET {set_clause} WHERE id = $1::uuid RETURNING *",
+            f"UPDATE appointments SET {set_clause} WHERE id = $1 RETURNING *",
             appointment_id, *updates.values(),
         )
     if not row:
@@ -139,7 +139,7 @@ async def update_appointment(
 
 @router.delete("/{appointment_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def cancel_appointment(
-    appointment_id: str,
+    appointment_id: uuid.UUID,
     current_user: dict = Depends(get_current_user),
 ):
     """Cancel (soft-delete via status) an appointment."""
@@ -148,7 +148,7 @@ async def cancel_appointment(
             """
             UPDATE appointments
                SET status = 'cancelled'
-             WHERE id = $1::uuid
+             WHERE id = $1
                AND status IN ('pending', 'confirmed')
             RETURNING id
             """,
