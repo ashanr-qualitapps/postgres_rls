@@ -1,0 +1,29 @@
+meta {
+  name: Create Service [admin]
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/services/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "branch_id": "{{branch_id}}",
+    "name": "Express Blowout",
+    "description": "Quick wash and blow-dry",
+    "duration_min": 30,
+    "price": 35.00,
+    "category": "Hair"
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("service_id", res.body.id);
+    console.log("Service id saved:", res.body.id);
+  }
+}

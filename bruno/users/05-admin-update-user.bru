@@ -1,0 +1,19 @@
+meta {
+  name: Admin Update User [admin]
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{base_url}}/users/{{user_id}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "role": "staff",
+    "branch_id": "{{branch_id}}",
+    "is_active": true
+  }
+}

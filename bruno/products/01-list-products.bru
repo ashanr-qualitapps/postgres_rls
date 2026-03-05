@@ -1,0 +1,18 @@
+meta {
+  name: List Products
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/products/
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~branch_id: {{branch_id}}
+  ~category: Hair Care
+  limit: 50
+  offset: 0
+}

@@ -1,0 +1,27 @@
+meta {
+  name: Book Appointment
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/appointments/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "service_id": "{{service_id}}",
+    "branch_id": "{{branch_id}}",
+    "scheduled_at": "2026-03-20T10:00:00Z",
+    "notes": "Please use fragrance-free products"
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("appointment_id", res.body.id);
+    console.log("Appointment id saved:", res.body.id);
+  }
+}

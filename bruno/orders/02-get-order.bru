@@ -1,0 +1,11 @@
+meta {
+  name: Get Order by ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/orders/{{order_id}}
+  body: none
+  auth: inherit
+}

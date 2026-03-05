@@ -1,0 +1,11 @@
+meta {
+  name: Get Branch by ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/branches/{{branch_id}}
+  body: none
+  auth: inherit
+}

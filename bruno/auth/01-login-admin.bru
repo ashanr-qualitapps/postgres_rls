@@ -1,0 +1,25 @@
+meta {
+  name: Login as Admin
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "admin@beautyapp.com",
+    "password": "password123"
+  }
+}
+
+script:post-response {
+  if (res.status === 200) {
+    bru.setEnvVar("token", res.body.access_token);
+    console.log("Admin token saved.");
+  }
+}

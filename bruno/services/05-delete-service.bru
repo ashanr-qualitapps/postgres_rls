@@ -1,0 +1,11 @@
+meta {
+  name: Delete Service [admin]
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/services/{{service_id}}
+  body: none
+  auth: inherit
+}

@@ -1,0 +1,17 @@
+meta {
+  name: Update Order Status [staff/admin]
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base_url}}/orders/{{order_id}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "status": "paid"
+  }
+}

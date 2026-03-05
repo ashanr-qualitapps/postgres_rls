@@ -1,0 +1,18 @@
+meta {
+  name: Update Appointment
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base_url}}/appointments/{{appointment_id}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "status": "confirmed",
+    "notes": "Confirmed by staff"
+  }
+}

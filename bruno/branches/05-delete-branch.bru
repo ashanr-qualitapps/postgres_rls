@@ -1,0 +1,11 @@
+meta {
+  name: Delete Branch [admin]
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/branches/{{branch_id}}
+  body: none
+  auth: inherit
+}

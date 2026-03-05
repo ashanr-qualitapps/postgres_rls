@@ -1,0 +1,18 @@
+meta {
+  name: Update My Profile
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{base_url}}/users/me
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "full_name": "Alice B. Brown",
+    "phone": "+1-555-1001"
+  }
+}

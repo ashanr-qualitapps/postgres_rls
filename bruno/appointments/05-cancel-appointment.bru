@@ -1,0 +1,11 @@
+meta {
+  name: Cancel Appointment
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/appointments/{{appointment_id}}
+  body: none
+  auth: inherit
+}

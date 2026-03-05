@@ -1,0 +1,11 @@
+meta {
+  name: Get Appointment by ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/appointments/{{appointment_id}}
+  body: none
+  auth: inherit
+}

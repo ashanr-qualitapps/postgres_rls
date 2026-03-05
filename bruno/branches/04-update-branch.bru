@@ -1,0 +1,18 @@
+meta {
+  name: Update Branch [admin]
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base_url}}/branches/{{branch_id}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Midtown Branch (updated)",
+    "is_active": true
+  }
+}

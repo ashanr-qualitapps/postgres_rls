@@ -1,0 +1,685 @@
+{
+  "info": {
+    "name": "Beauty App API",
+    "_postman_id": "beauty-app-api-v1",
+    "description": "Multi-tenant beauty salon API.\n\n## Quick start\n1. Set the `base_url` collection variable (default: `http://localhost:8000`).\n2. Run **Login as Admin** (or any login request) – the test script automatically stores the JWT in the `token` collection variable.\n3. All other requests pick up the token from `{{token}}` via the collection-level Auth setting.\n\n## Seeded credentials (dev only)\n- Admin: `admin@beautyapp.com` / `password123`\n- Staff Downtown: `staff.downtown@beautyapp.com` / `password123`\n- Staff Uptown: `staff.uptown@beautyapp.com` / `password123`\n- Customer Alice: `alice@example.com` / `password123`\n- Customer Charlie: `charlie@example.com` / `password123`",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url",       "value": "http://localhost:8000", "type": "string" },
+    { "key": "token",          "value": "",                      "type": "string" },
+    { "key": "branch_id",      "value": "11111111-0000-0000-0000-000000000001", "type": "string" },
+    { "key": "service_id",     "value": "33333333-0000-0000-0000-000000000001", "type": "string" },
+    { "key": "product_id",     "value": "55555555-0000-0000-0000-000000000001", "type": "string" },
+    { "key": "appointment_id", "value": "", "type": "string" },
+    { "key": "order_id",       "value": "", "type": "string" },
+    { "key": "user_id",        "value": "", "type": "string" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/health", "host": ["{{base_url}}"], "path": ["health"] }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login as Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const body = pm.response.json();",
+                  "    pm.collectionVariables.set('token', body.access_token);",
+                  "    console.log('Token saved.');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@beautyapp.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Login as Staff (Downtown)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const body = pm.response.json();",
+                  "    pm.collectionVariables.set('token', body.access_token);",
+                  "    console.log('Token saved.');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"staff.downtown@beautyapp.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Login as Customer (Alice)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const body = pm.response.json();",
+                  "    pm.collectionVariables.set('token', body.access_token);",
+                  "    console.log('Token saved.');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alice@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Register (new customer)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const body = pm.response.json();",
+                  "    pm.collectionVariables.set('user_id', body.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"newcustomer@example.com\",\n  \"password\": \"securePass1\",\n  \"full_name\": \"New Customer\",\n  \"phone\": \"+1-555-9999\",\n  \"branch_id\": \"{{branch_id}}\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/auth/register", "host": ["{{base_url}}"], "path": ["auth", "register"] }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Branches",
+      "item": [
+        {
+          "name": "List Branches",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/branches/?active_only=true&limit=50&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["branches", ""],
+              "query": [
+                { "key": "active_only", "value": "true" },
+                { "key": "limit",       "value": "50" },
+                { "key": "offset",      "value": "0" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Branch by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/branches/{{branch_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["branches", "{{branch_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Branch  [admin]",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.collectionVariables.set('branch_id', pm.response.json().id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Midtown Branch\",\n  \"address\": \"300 5th Ave\",\n  \"phone\": \"+1-555-0303\",\n  \"timezone\": \"America/New_York\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/branches/", "host": ["{{base_url}}"], "path": ["branches", ""] }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Branch  [admin]",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Midtown Branch (updated)\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/branches/{{branch_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["branches", "{{branch_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Branch  [admin]",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/branches/{{branch_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["branches", "{{branch_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Services",
+      "item": [
+        {
+          "name": "List Services",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/services/?branch_id={{branch_id}}&limit=50&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["services", ""],
+              "query": [
+                { "key": "branch_id", "value": "{{branch_id}}" },
+                { "key": "category",  "value": "", "disabled": true },
+                { "key": "limit",     "value": "50" },
+                { "key": "offset",    "value": "0" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Service by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/services/{{service_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["services", "{{service_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Service  [admin]",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.collectionVariables.set('service_id', pm.response.json().id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"branch_id\": \"{{branch_id}}\",\n  \"name\": \"Express Blowout\",\n  \"description\": \"Quick wash and blow-dry\",\n  \"duration_min\": 30,\n  \"price\": 35.00,\n  \"category\": \"Hair\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/services/", "host": ["{{base_url}}"], "path": ["services", ""] }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Service  [admin]",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 38.00,\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/services/{{service_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["services", "{{service_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Service  [admin]",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/services/{{service_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["services", "{{service_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Appointments",
+      "item": [
+        {
+          "name": "List Appointments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/appointments/?limit=50&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["appointments", ""],
+              "query": [
+                { "key": "branch_id", "value": "{{branch_id}}", "disabled": true },
+                { "key": "status",    "value": "pending",       "disabled": true },
+                { "key": "limit",     "value": "50" },
+                { "key": "offset",    "value": "0" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Appointment by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/appointments/{{appointment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["appointments", "{{appointment_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Book Appointment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.collectionVariables.set('appointment_id', pm.response.json().id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"service_id\": \"{{service_id}}\",\n  \"branch_id\": \"{{branch_id}}\",\n  \"scheduled_at\": \"2026-03-20T10:00:00Z\",\n  \"notes\": \"Please use fragrance-free products\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/appointments/", "host": ["{{base_url}}"], "path": ["appointments", ""] }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Appointment",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"confirmed\",\n  \"notes\": \"Confirmed by staff\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/appointments/{{appointment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["appointments", "{{appointment_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Appointment",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/appointments/{{appointment_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["appointments", "{{appointment_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/?limit=50&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["products", ""],
+              "query": [
+                { "key": "branch_id", "value": "{{branch_id}}", "disabled": true },
+                { "key": "category",  "value": "",              "disabled": true },
+                { "key": "limit",     "value": "50" },
+                { "key": "offset",    "value": "0" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/{{product_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["products", "{{product_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product  [admin]",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.collectionVariables.set('product_id', pm.response.json().id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"branch_id\": \"{{branch_id}}\",\n  \"name\": \"Keratin Conditioner\",\n  \"description\": \"Smoothing hair conditioner\",\n  \"sku\": \"COND-KER-001\",\n  \"price\": 19.99,\n  \"stock_qty\": 100,\n  \"category\": \"Hair Care\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/products/", "host": ["{{base_url}}"], "path": ["products", ""] }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product  [admin]",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 21.99,\n  \"stock_qty\": 80\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/products/{{product_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["products", "{{product_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product  [admin]",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/{{product_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["products", "{{product_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "List Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/orders/?limit=50&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["orders", ""],
+              "query": [
+                { "key": "branch_id", "value": "{{branch_id}}", "disabled": true },
+                { "key": "status",    "value": "pending",       "disabled": true },
+                { "key": "limit",     "value": "50" },
+                { "key": "offset",    "value": "0" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Place Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.collectionVariables.set('order_id', pm.response.json().id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"branch_id\": \"{{branch_id}}\",\n  \"notes\": \"Gift wrap please\",\n  \"items\": [\n    { \"product_id\": \"{{product_id}}\", \"quantity\": 2 }\n  ]\n}"
+            },
+            "url": { "raw": "{{base_url}}/orders/", "host": ["{{base_url}}"], "path": ["orders", ""] }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Order Status  [staff/admin]",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"paid\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/orders/{{order_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["orders", "{{order_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{base_url}}/users/me", "host": ["{{base_url}}"], "path": ["users", "me"] }
+          },
+          "response": []
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Alice B. Brown\",\n  \"phone\": \"+1-555-1001\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/users/me", "host": ["{{base_url}}"], "path": ["users", "me"] }
+          },
+          "response": []
+        },
+        {
+          "name": "List Users  [staff/admin]",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/?limit=50&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["users", ""],
+              "query": [
+                { "key": "branch_id", "value": "{{branch_id}}", "disabled": true },
+                { "key": "role",      "value": "customer",      "disabled": true },
+                { "key": "limit",     "value": "50" },
+                { "key": "offset",    "value": "0" }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["users", "{{user_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Update User  [admin]",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"staff\",\n  \"branch_id\": \"{{branch_id}}\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["users", "{{user_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

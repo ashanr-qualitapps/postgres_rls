@@ -1,0 +1,18 @@
+meta {
+  name: List Orders
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/orders/
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~branch_id: {{branch_id}}
+  ~status: pending
+  limit: 50
+  offset: 0
+}

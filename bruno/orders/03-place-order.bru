@@ -1,0 +1,28 @@
+meta {
+  name: Place Order
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/orders/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "branch_id": "{{branch_id}}",
+    "notes": "Gift wrap please",
+    "items": [
+      { "product_id": "{{product_id}}", "quantity": 2 }
+    ]
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("order_id", res.body.id);
+    console.log("Order id saved:", res.body.id);
+  }
+}

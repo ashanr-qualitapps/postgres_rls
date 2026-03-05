@@ -22,19 +22,19 @@ ON CONFLICT DO NOTHING;
 INSERT INTO users (id, branch_id, email, password_hash, full_name, phone, role) VALUES
     -- Admin (no branch affiliation)
     ('22222222-0000-0000-0000-000000000001', NULL,
-     'admin@beautyapp.local',
+     'admin@beautyapp.com',
      crypt('password123', gen_salt('bf', 12)),
      'Admin User', '+1-555-9001', 'admin'),
 
     -- Staff at Downtown
     ('22222222-0000-0000-0000-000000000002', '11111111-0000-0000-0000-000000000001',
-     'staff.downtown@beautyapp.local',
+     'staff.downtown@beautyapp.com',
      crypt('password123', gen_salt('bf', 12)),
      'Jane Smith', '+1-555-9002', 'staff'),
 
     -- Staff at Uptown
     ('22222222-0000-0000-0000-000000000003', '11111111-0000-0000-0000-000000000002',
-     'staff.uptown@beautyapp.local',
+     'staff.uptown@beautyapp.com',
      crypt('password123', gen_salt('bf', 12)),
      'Bob Johnson', '+1-555-9003', 'staff'),
 

@@ -1,0 +1,18 @@
+meta {
+  name: List Services
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/services/
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~branch_id: {{branch_id}}
+  ~category: Hair
+  limit: 50
+  offset: 0
+}

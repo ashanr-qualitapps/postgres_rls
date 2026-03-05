@@ -1,0 +1,17 @@
+meta {
+  name: List Branches
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/branches/
+  body: none
+  auth: inherit
+}
+
+params:query {
+  active_only: true
+  limit: 50
+  offset: 0
+}

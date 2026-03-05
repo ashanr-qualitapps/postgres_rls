@@ -1,0 +1,18 @@
+meta {
+  name: Update Service [admin]
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base_url}}/services/{{service_id}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "price": 38.00,
+    "is_active": true
+  }
+}

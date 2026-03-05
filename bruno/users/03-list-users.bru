@@ -1,0 +1,18 @@
+meta {
+  name: List Users [staff/admin]
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/users/
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~branch_id: {{branch_id}}
+  ~role: customer
+  limit: 50
+  offset: 0
+}
